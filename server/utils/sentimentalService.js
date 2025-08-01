@@ -1,5 +1,7 @@
 import OpenAI from "openai";
-const client = new OpenAI(process.env.OPENAI_API_KEY);
+const client = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+});
 
 
 const analyzeSentiment = async (message) => {
@@ -14,9 +16,10 @@ const analyzeSentiment = async (message) => {
                 role: "user",
                 content: `Analyze the sentiment of the following message: ${message}`
             }
-        ],
-})
-return response.choices[0].message.content.toLowerCase().trim();
+        ]
+    });
+    
+    return response.choices[0].message.content.toLowerCase().trim();
 }
 
-export default { analyzeSentiment };
+export default analyzeSentiment ;

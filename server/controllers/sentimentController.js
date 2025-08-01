@@ -1,4 +1,4 @@
-import { analyzeSentiment } from "../utils/sentimentalService.js";
+import analyzeSentiment from "../utils/sentimentalService.js";
 
 const analyzeSentimentController = async (req, res, next) => {
     try {

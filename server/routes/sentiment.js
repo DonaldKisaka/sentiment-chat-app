@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getSentiment } from "../controllers/sentimentController.js";
+import analyzeSentimentController from "../controllers/sentimentController.js";
 
 const sentimentRouter = Router();
 

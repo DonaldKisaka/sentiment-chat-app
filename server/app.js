@@ -6,6 +6,10 @@ import sentimentRouter from "./routes/sentiment.js";
 import userRouter from "./routes/user.js";
 import messageRouter from "./routes/message.js";
 import errorMiddleware from "./middleware/error.middleware.js";
+import { Server } from "socket.io";
+import http from "http";
+
+
 
 dotenv.config();
 
@@ -24,9 +28,34 @@ app.use('/api/message', messageRouter);
 
 app.use(errorMiddleware);
 
+const server = http.createServer(app);
+
+const io = new Server(server, {
+    cors: {
+        origin: "http://localhost:3000",
+        methods: ["GET", "POST"],
+    }
+});
+
+// Event handling
+io.on('connection', (socket) => {
+    console.log("User connected:", socket.id);
+
+    socket.on('send_message', (data) => {
+        console.log('Message received:', data);
+        io.emit('receive_message', data);
+    })
+
+    socket.on('disconnect', () => {
+        console.log("User disconnected:", socket.id);
+    });
+});
+
+
+
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, async () => {
+server.listen(PORT, async () => {
     console.log(`Server is running on port ${PORT}`);
     
     await connectDB();

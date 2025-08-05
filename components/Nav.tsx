@@ -7,7 +7,7 @@ const Nav = () => {
     <nav className="w-full border-b border-gray-200 bg-white py-2">
         <div className="container mx-auto px-4 flex items-center gap-10">
             <Link href="/" className="flex items-center gap-2">
-                <Image src="/logo.png" alt="logo" width={32} height={32} />
+                <Image src="/logo.png" alt="logo" width={42} height={42} />
                 <span className="text-xl font-light">ChatSphere</span>
             </Link>
 

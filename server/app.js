@@ -32,7 +32,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: process.env.CLIENT_URL || "http://localhost:3000",
         methods: ["GET", "POST"],
     }
 });
@@ -42,8 +42,15 @@ io.on('connection', (socket) => {
     console.log("User connected:", socket.id);
 
     socket.on('send_message', (data) => {
-        console.log('Message received:', data);
-        io.emit('receive_message', data);
+        try {
+            console.log('Message received:', data);
+
+            if (data && data.message) {
+                io.emit('receive_message', data);
+            }
+        } catch (error) {
+            console.log('Error in sending message:', error);
+        }
     })
 
     socket.on('disconnect', () => {

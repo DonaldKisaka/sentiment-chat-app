@@ -1,5 +1,4 @@
 import { compare, hash } from 'bcryptjs'
-import { nanoid } from 'nanoid'
 import { cookies } from 'next/headers'
 import * as jose from 'jose'
 import { cache } from 'react'

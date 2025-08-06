@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import bcrypt from 'bcryptjs';
 
 export const registerUser = async (req, res, next) => {
     try {
@@ -12,9 +13,12 @@ export const registerUser = async (req, res, next) => {
             });
         }
 
+        // Hash password before storing
+        const hashedPassword = await bcrypt.hash(password, 10);
+
         const user = await User.create({
             email,
-            password
+            password: hashedPassword
         });
 
         res.status(201).json({
@@ -42,6 +46,26 @@ export const getUsers = async (req, res, next) => {
         res.status(200).json({
             success: true,
             data: users
+        })
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const getUserByEmail = async (req, res, next) => {
+    try {
+        const user = await User.findOne({ email: req.query.email });
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            })
+        }
+
+        res.status(200).json({
+            success: true,
+            data: user
         })
     } catch (error) {
         next(error);

@@ -18,9 +18,7 @@ const JWT_EXPIRATION = '7d'
 
 const REFRESH_THRESHOLD = 24 * 60 * 60
 
-export async function hashedPassword(password: string) {
-    return await hash(password, 10)
-}
+
 
 export async function verifyPassword(password: string, hashedPassword: string) {
     return await compare(password, hashedPassword)

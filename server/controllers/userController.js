@@ -54,7 +54,7 @@ export const getUsers = async (req, res, next) => {
 
 export const getUserByEmail = async (req, res, next) => {
     try {
-        const user = await User.findOne({ email: req.query.email });
+        const user = await User.findOne({ email: req.query.email }).select('password email _id');
 
         if (!user) {
             return res.status(404).json({

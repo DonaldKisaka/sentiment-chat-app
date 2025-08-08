@@ -1,4 +1,4 @@
-import { compare, hash } from 'bcryptjs'
+import { compare } from 'bcryptjs'
 import { cookies } from 'next/headers'
 import * as jose from 'jose'
 import { cache } from 'react'

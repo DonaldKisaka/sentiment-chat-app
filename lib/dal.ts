@@ -2,7 +2,7 @@ import { getSession } from '@/lib/auth'
 
 export async function getUserByEmail(email: string) {
     try {
-        const res = await fetch(`http://localhost:5000/api/user?email=${email}`)
+        const res = await fetch(`http://localhost:5000/api/user?email=${encodeURIComponent(email)}`, { cache: 'no-store' })
         if (!res.ok) return null
         const data = await res.json()
         return data.success ? data.data : null

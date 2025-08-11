@@ -6,6 +6,7 @@ import sentimentRouter from "./routes/sentiment.js";
 import userRouter from "./routes/user.js";
 import messageRouter from "./routes/message.js";
 import errorMiddleware from "./middleware/error.middleware.js";
+import Message from "./models/Message.js";
 import { Server } from "socket.io";
 import http from "http";
 
@@ -54,14 +55,16 @@ io.on('connection', (socket) => {
                 return;
             }
 
-            const saved = await (await import('./models/Message.js')).default.create({
+            const saved = await Message.create({
                 content,
                 sender,
                 receiver,
                 sentiment
             });
 
-            io.emit('receive_message', saved);
+            const populated = await saved.populate(["sender", "receiver"]);
+
+            io.emit('receive_message', populated);
         } catch (error) {
             console.log('Error in sending message:', error);
         }

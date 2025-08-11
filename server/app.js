@@ -40,19 +40,32 @@ const io = new Server(server, {
 
 // Event handling
 io.on('connection', (socket) => {
-    console.log("User connected:", socket.id);
+    console.log("A user connected");
 
-    socket.on('send_message', (data) => {
+    socket.on('send_message', async (data) => {
         try {
-            console.log('Message received:', data);
+            const content = data?.content ?? data?.text ?? data?.message;
+            const sender = data?.sender ?? data?.userId;
+            const receiver = data?.receiver ?? null;
+            const sentiment = data?.sentiment ?? 'neutral';
 
-            if (data && data.message) {
-                io.emit('receive_message', data);
+            if (!content || !sender) {
+                console.log('Invalid payload for send_message:', data);
+                return;
             }
+
+            const saved = await (await import('./models/Message.js')).default.create({
+                content,
+                sender,
+                receiver,
+                sentiment
+            });
+
+            io.emit('receive_message', saved);
         } catch (error) {
             console.log('Error in sending message:', error);
         }
-    })
+    });
 
     socket.on('disconnect', () => {
         console.log("User disconnected:", socket.id);

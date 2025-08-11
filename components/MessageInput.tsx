@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,7 +26,7 @@ export default function MessageInput({ onSendMessage, isLoading }: MessageInputP
             <form onSubmit={handleSubmit} className="flex items-center gap-2">
                 <Input
                     type="text"
-                    placeholder="Type your message..."
+                    placeholder="Type your message here..."
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     disabled={isLoading}

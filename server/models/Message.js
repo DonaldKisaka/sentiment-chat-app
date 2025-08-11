@@ -13,7 +13,8 @@ const messageSchema = new mongoose.Schema({
     receiver: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: [true, 'Receiver is required'],
+        required: false,
+        default: null,
     },
     sentiment: {
         type: String,

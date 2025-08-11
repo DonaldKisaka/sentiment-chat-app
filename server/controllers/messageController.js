@@ -2,25 +2,27 @@ import Message from "../models/Message.js";
 
 export const createMessage = async (req, res, next) => {
     try {
-        const { message, userId } = req.body;
+        const { content, sender, receiver = null, sentiment } = req.body;
 
-        if (!newMessage || !userId) {
+        if (!content || !sender) {
             return res.status(400).json({
                 success: false,
-                message: "Message and userId are required"
+                message: "Content and sender are required"
             });
         }
 
-        const newMessage = new Message({
-            message,
-            userId
+        const newMessage = await Message.create({
+            content,
+            sender,
+            receiver,
+            sentiment
         });
 
-        await newMessage.save();
+        const populated = await newMessage.populate(["sender", "receiver"]);
 
         res.status(201).json({
             success: true,
-            data: newMessage
+            data: populated
         });
     } catch (error) {
         next(error);
@@ -30,7 +32,7 @@ export const createMessage = async (req, res, next) => {
 export const getMessages = async (req, res, next) => {
     try {
 
-        const messages = await Message.find().populate("userId");
+        const messages = await Message.find().populate(["sender", "receiver"]);
 
         res.status(200).json({
             success: true,
@@ -43,7 +45,7 @@ export const getMessages = async (req, res, next) => {
 
 export const getMessage = async (req, res, next) => {
     try {
-        const message = await Message.findById(req.params.id).populate("userId");
+        const message = await Message.findById(req.params.id).populate(["sender", "receiver"]);
 
         if (!message) {
             return res.status(404).json({

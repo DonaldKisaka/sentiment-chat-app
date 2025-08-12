@@ -74,7 +74,7 @@ export default function Dashboard() {
         }
         return [...prev, uiMsg];
       });
-      
+
       setSentimentStats(prev => {
         const next = { ...prev };
         if (uiMsg.sentiment === "positive") next.positive += 1;
@@ -99,6 +99,15 @@ export default function Dashboard() {
     if (!socket || !text.trim()) return;
 
     const clientId = `c_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+
+    const optimistic: Message = {
+      id: clientId,
+      text,
+      user,
+      timestamp: new Date().toISOString(),
+      sentiment: "pending",
+    };
+    setMessages(prev => [...prev, optimistic]);
 
     // Let the server persist and broadcast
     socket.emit("send_message", {

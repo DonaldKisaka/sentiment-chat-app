@@ -21,7 +21,11 @@ const messageSchema = new mongoose.Schema({
         enum: ['positive', 'negative', 'neutral'],
         default: 'neutral',
     },
-    
+    status: {
+        type: String,
+        enum: ['pending', 'processed'],
+        default: 'pending',
+    },
 }, {timestamps: true});
 
 const Message = mongoose.model('Message', messageSchema);

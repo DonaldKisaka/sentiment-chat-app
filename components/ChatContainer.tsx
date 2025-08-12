@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { Card, CardContent } from "./ui/card";
 import MessageList from "./MessageList";
 import MessageInput from "./MessageInput";
@@ -32,6 +31,7 @@ interface ChatContainerProps {
     avatar?: string;
   };
   roomId?: string;
+  isConnected?: boolean;
 }
 
 const ChatContainer = ({
@@ -40,22 +40,8 @@ const ChatContainer = ({
   sentimentStats = { positive: 0, neutral: 0, negative: 0 },
   user = { id: "1", name: "User", avatar: "" },
   roomId = "general",
+  isConnected = false,
 }: ChatContainerProps) => {
-  const [isConnected, setIsConnected] = useState(false);
-
-  // Mock socket connection - in a real app, this would connect to your backend
-  useEffect(() => {
-    // Simulate socket connection
-    const connectTimeout = setTimeout(() => {
-      setIsConnected(true);
-      console.log("Connected to chat server");
-    }, 1000);
-
-    return () => {
-      clearTimeout(connectTimeout);
-      setIsConnected(false);
-    };
-  }, []);
 
   // Function to handle sending a new message
   const handleSendMessage = (text: string) => {

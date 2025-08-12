@@ -33,7 +33,7 @@ export default function MessageInput({ onSendMessage, isLoading }: MessageInputP
                     className="flex-1"
                     aria-label="Message"
                 />
-                <Button type="submit" disabled={isLoading} size="icon" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">
+                <Button type="submit" disabled={isLoading || !message.trim()} size="icon" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">
                     <Send className="w-4 h-4" />
                 </Button>
             </form>

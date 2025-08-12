@@ -64,7 +64,7 @@ io.on('connection', (socket) => {
 
             const populated = await saved.populate(["sender", "receiver"]);
 
-            io.emit('receive_message', populated);
+            io.emit('receive_message', { ...populated.toObject(), clientId });
         } catch (error) {
             console.log('Error in sending message:', error);
         }

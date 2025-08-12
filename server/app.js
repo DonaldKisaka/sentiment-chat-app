@@ -49,6 +49,7 @@ io.on('connection', (socket) => {
             const sender = data?.sender ?? data?.userId;
             const receiver = data?.receiver ?? null;
             const sentiment = data?.sentiment ?? 'neutral';
+            const clientId = data?.clientId;
 
             if (!content || !sender) {
                 console.log('Invalid payload for send_message:', data);
@@ -59,7 +60,7 @@ io.on('connection', (socket) => {
                 content,
                 sender,
                 receiver,
-                sentiment
+                sentiment,
             });
 
             const populated = await saved.populate(["sender", "receiver"]);

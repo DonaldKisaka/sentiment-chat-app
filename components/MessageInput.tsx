@@ -22,8 +22,8 @@ export default function MessageInput({ onSendMessage, isLoading }: MessageInputP
     };
 
     return (
-        <div>
-            <form onSubmit={handleSubmit} className="flex items-center gap-2">
+        <div className="bg-background border-t p-4 w-full">
+            <form onSubmit={handleSubmit} className="flex gap-2">
                 <Input
                     type="text"
                     placeholder="Type your message here..."

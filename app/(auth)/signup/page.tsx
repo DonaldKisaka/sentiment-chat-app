@@ -28,6 +28,7 @@ export default function SignUpPage() {
             const result = await SignUp(formData);
 
             if (result.success) {
+                document.cookie = `userId=${encodeURIComponent(result.userId!)}; path=/; max-age=2592000; samesite=lax`;
                 toast.success('Account created successfully');
                 router.push('/dashboard');
                 router.refresh();

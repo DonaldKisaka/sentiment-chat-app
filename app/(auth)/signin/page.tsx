@@ -29,7 +29,7 @@ export default function SignInPage() {
             const result = await SignIn(formData);
 
             if (result.success) {
-                document.cookie = `userId=${encodeURIComponent(result.userId!)}; path=/; max-age=2592000; samesite=lax`;
+                document.cookie = `userId=${encodeURIComponent(result.userId!)}; path=/; max-age=2592000; sameSite=lax`;
                 toast.success('Signed in successfully');
                 router.push('/dashboard');
                 router.refresh();

@@ -5,6 +5,10 @@ import socket from "@/lib/socket";
 import ChatContainer from "@/components/ChatContainer";
 import { Card, CardContent } from "@/components/ui/card";
 
+function getCookie(name: string) {
+  return document.cookie.split("; ").find(row => row.startsWith(`${name}=`))?.split("=")[1];
+}
+
 interface Message {
   id: string;
   text: string;
@@ -35,10 +39,12 @@ interface ServerMessage {
 }
 
 export default function Dashboard() {
+  const userIdFromCookie = getCookie("userId");
+
   const [isConnected, setIsConnected] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [user] = useState({
-    id: `user-${Math.floor(Math.random() * 10000)}`,
+    id: userIdFromCookie ? decodeURIComponent(userIdFromCookie) : "",
     name: `User ${Math.floor(Math.random() * 100)}`,
     avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${Math.random()}`,
   });
@@ -96,7 +102,7 @@ export default function Dashboard() {
   }, []);
 
   const sendMessage = (text: string) => {
-    if (!socket || !text.trim()) return;
+    if (!socket || !text.trim() || !user.id) return;
 
     const clientId = `c_${Date.now()}_${Math.random().toString(36).slice(2)}`;
 

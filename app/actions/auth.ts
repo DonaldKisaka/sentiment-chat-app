@@ -9,6 +9,7 @@ import {
 } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import { getUserByEmail } from '@/lib/dal'
+import { cookies } from 'next/headers'
 
 const SignInSchema = z.object({
     email: z.string().min(1, 'Email is required').email('Invalid email format'),
@@ -151,7 +152,12 @@ export const SignUp = async (formData: FormData): Promise<ActionResponse> => {
 
 export const signOut = async () => {
     try {
-        document.cookie = 'userId=; path=/; max-age=0; samesite=lax';
+        const cookieStore = await cookies()
+        cookieStore.set('userId', '', {
+            path: '/',
+            maxAge: 0,
+            sameSite: 'lax',
+        })
         await deleteSession()
     } catch (e) {
         console.error(e)

@@ -32,6 +32,7 @@ export type ActionResponse = {
     message: string
     errors?: Record<string, string[]>
     error?: string
+    userId?: string
 }
 
 export const SignIn = async (formData: FormData): Promise<ActionResponse> => {
@@ -80,6 +81,7 @@ export const SignIn = async (formData: FormData): Promise<ActionResponse> => {
         return {
             success: true,
             message: 'Signed in successfully',
+            userId: user._id,
         }
     } catch (e) {
         console.error(e)
@@ -135,6 +137,7 @@ export const SignUp = async (formData: FormData): Promise<ActionResponse> => {
         return {
             success: true,
             message: 'Account created successfully',
+            userId: user._id,
         }
     } catch (e) {
         console.error(e)
@@ -148,6 +151,7 @@ export const SignUp = async (formData: FormData): Promise<ActionResponse> => {
 
 export const signOut = async () => {
     try {
+        document.cookie = 'userId=; path=/; max-age=0; samesite=lax';
         await deleteSession()
     } catch (e) {
         console.error(e)

@@ -32,15 +32,12 @@ app.use(errorMiddleware);
 
 const server = http.createServer(app);
 
-console.log('CLIENT_URL from env:', process.env.CLIENT_URL);
-console.log('Type:', typeof process.env.CLIENT_URL);
-console.log('Length:', process.env.CLIENT_URL?.length);
 
 const io = new Server(server, {
     cors: {
         origin: process.env.CLIENT_URL,
         methods: ["GET", "POST"],
-    }
+    },
 });
 
 // Event handling

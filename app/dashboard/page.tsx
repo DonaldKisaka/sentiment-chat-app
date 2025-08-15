@@ -39,15 +39,21 @@ interface ServerMessage {
 }
 
 export default function Dashboard() {
-  const userIdFromCookie = getCookie("userId");
 
   const [isConnected, setIsConnected] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
-  const [user] = useState({
-    id: userIdFromCookie ? decodeURIComponent(userIdFromCookie) : "",
+  const [user, setUser] = useState({
+    id: "",
     name: `User ${Math.floor(Math.random() * 100)}`,
     avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${Math.random()}`,
   });
+  useEffect(() => {
+    const userIdFromCookie = getCookie("userId");
+    if (userIdFromCookie) {
+      setUser(prev => ({ ...prev, id: decodeURIComponent(userIdFromCookie) }));
+    }
+  }, []);
+
   const [sentimentStats, setSentimentStats] = useState<SentimentStats>({
     positive: 0,
     neutral: 0,
@@ -55,10 +61,21 @@ export default function Dashboard() {
   });
 
   useEffect(() => {
-    if (!socket) return;
+    if (!socket) {
+      return;
+    };
 
-    const onConnect = () => setIsConnected(true);
-    const onDisconnect = () => setIsConnected(false);
+    if (socket.connected) {
+      setIsConnected(true);
+    }
+
+    const onConnect = () => {
+      setIsConnected(true); 
+    };
+    const onDisconnect = () => {
+      setIsConnected(false);
+    };
+    
 
     const onReceiveMessage = (serverMsg: ServerMessage) => {
       const uiMsg: Message = {
@@ -93,7 +110,7 @@ export default function Dashboard() {
     socket.on("connect", onConnect);
     socket.on("disconnect", onDisconnect);
     socket.on("receive_message", onReceiveMessage);
-
+    
     return () => {
       socket.off("connect", onConnect);
       socket.off("disconnect", onDisconnect);
